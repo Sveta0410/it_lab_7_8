@@ -3,8 +3,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class URLDepthPair {
-    public static final String URL_PREFIX = "http: //";
-    public static final String URL_HREF = "<a href=";
+    public static final String URL_PREFIX = "http://";
+    public static final String URL_HREF = "<a href=\"" + URL_PREFIX;
+    public static final int URL_HREF_LENGTH = URL_HREF.length();
+
 
     private String urlAddress; // URL-адрес
     private int searchDepth; // глубина поиска
@@ -54,14 +56,13 @@ public class URLDepthPair {
 
     // проверяем, является ли найденная строка ссылкой и возвращаем найденный url
     public static String isLink(String link) {
-        // ".+" - любой символ 1 и более раз
-        // "\"" - экранируем кавычку
-        Pattern pattern = Pattern.compile((URL_HREF + "\"") + (URL_PREFIX + ".+") + ("\"" + ">"));
-        Matcher matcher = pattern.matcher(link);
-        if (matcher.matches()) {
-            return matcher.group(2);
-        } else {
+        int start = link.indexOf(URL_HREF);
+        if (start == -1) {
             return "";
         }
+        start += URL_HREF_LENGTH;
+        String result = link.substring(start, link.indexOf("\"", start));
+        return "http://" + result;
+
     }
 }
