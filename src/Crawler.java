@@ -48,20 +48,90 @@ public class Crawler {
             // создаём временный список для хранения всех ссылкох, расположеных на текущей странице
             LinkedList<URLDepthPair> currentLinksList = new LinkedList<URLDepthPair>();
             // добавляем в ранне созданный список ссылки, расположенные на текущей странице
-//            currentLinksList = Crawler.getAllLinks(depthPair);
+            currentLinksList = Crawler.getAllLinks(depthPair);
 
         }
 
     }
 
     // метод для поиска всех ссылок расположенных на странице
-//    private static LinkedList<URLDepthPair> getAllLinks(URLDepthPair currentDepthPair){
-//        // создаём список для зранения найденных ссылок
-//        LinkedList<URLDepthPair> foundURLs = new LinkedList<URLDepthPair>();
-//        // создаём сокет
-//        Socket socket;
-//
-//    }
+    private static LinkedList<URLDepthPair> getAllLinks(URLDepthPair currentDepthPair) {
+        int port = 80; // порт по которому мы будем подключаться (для http)
+        // создаём список для зранения найденных ссылок
+        LinkedList<URLDepthPair> foundURLs = new LinkedList<URLDepthPair>();
+        // создаём сокет
+        Socket socket;
+
+        // инициализируем сокет
+        try {
+            socket = new Socket(currentDepthPair.getHost(), port);
+        } catch (UnknownHostException e) {
+            // исключение "неизвестный хост"
+            System.err.println("UnknownHostException " + e.getMessage());
+            return foundURLs;
+        } catch (IOException e) {
+            // исключение ввода/вывода
+            System.err.println("IOException " + e.getMessage());
+            return foundURLs;
+        }
+
+        // устанавливаем время ожидания сокета (в миллисекундах)
+        // это необходимо для того, чтобы сокет знал, сколько нужно ждать передачи данных с другой стороны
+        // SocketException = возникновение ошибки на сокете
+        try {
+            socket.setSoTimeout(1000); // 1 секунда
+        } catch (SocketException e) {
+            System.err.println("SocketException " + e.getMessage());
+            return foundURLs;
+        }
+
+        // создаём outputStream (метод getOutputStream позволяет сокету отправлять данные на другую сторону соединения)
+        OutputStream outputStream;
+        try {
+            outputStream = socket.getOutputStream();
+        } catch (IOException e) {
+            // исключение ввода/вывода
+            System.err.println("IOException " + e.getMessage());
+            return foundURLs;
+        }
+
+        // создаём printWriter
+        // autoFlush - true = буфер будет очищаться после каждого вызова метода println
+        PrintWriter printWriter = new PrintWriter(outputStream, true);
+        // отпрввляем на сервер запрос
+        printWriter.println("GET " + currentDepthPair.getPath() + " HTTP/1.1"); // запрашиваем страницу
+        printWriter.println("Host: " + currentDepthPair.getHost()); // запрашиваем страницу
+        printWriter.println("Connection: closed");
+        printWriter.println();
+
+        // создаём inputStreamReader (для получения информации с другого конца соединения)
+        InputStreamReader in;
+        try {
+            in = new InputStreamReader(socket.getInputStream());
+        } catch (IOException e) {
+            // исключение ввода/вывода
+            System.err.println("IOException " + e.getMessage());
+            return foundURLs;
+        }
+        // создаём BufferedReader для чтения целых строк
+        BufferedReader reader = new BufferedReader(in);
+        // перебираем строки
+        while (true) {
+            String line;
+            try {
+                line = reader.readLine();
+            } catch (IOException e) {
+                // исключение ввода/вывода
+                System.err.println("IOException " + e.getMessage());
+                return foundURLs;
+            }
+            // если строка не считалась (больше строк нет), выходим из цикла
+            if (line == null) {
+                break;
+            }
+
+        }
+    }
 
     // возвращаем список всех пар URL-глубины, которые были посещены
     private static void getSites(LinkedList<URLDepthPair> linkedList) {
