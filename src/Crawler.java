@@ -129,8 +129,17 @@ public class Crawler {
             if (line == null) {
                 break;
             }
-
+            URLDepthPair newURLPair;
+            // находим url
+            String newURL =  URLDepthPair.isLink(line);
+            // если url успешно найдено, добавляем пару
+            // если формат не подходит, продолжаем перебирать строки
+            if (!"".equals(newURL)){
+                newURLPair = new URLDepthPair(newURL, currentDepthPair.getDepth() + 1);
+                foundURLs.add(newURLPair);
+            }
         }
+        return foundURLs;
     }
 
     // возвращаем список всех пар URL-глубины, которые были посещены

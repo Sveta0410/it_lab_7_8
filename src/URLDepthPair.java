@@ -1,7 +1,11 @@
 import java.net.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class URLDepthPair {
     public static final String URL_PREFIX = "http: //";
+    public static final String URL_HREF = "<a href=";
+
     private String urlAddress; // URL-адрес
     private int searchDepth; // глубина поиска
 
@@ -46,5 +50,18 @@ public class URLDepthPair {
     @Override
     public String toString() {
         return "URL - " + urlAddress + ". Depth - " + searchDepth;
+    }
+
+    // проверяем, является ли найденная строка ссылкой и возвращаем найденный url
+    public static String isLink(String link) {
+        // ".+" - любой символ 1 и более раз
+        // "\"" - экранируем кавычку
+        Pattern pattern = Pattern.compile((URL_HREF + "\"") + (URL_PREFIX + ".+") + ("\"" + ">"));
+        Matcher matcher = pattern.matcher(link);
+        if (matcher.matches()) {
+            return matcher.group(2);
+        } else {
+            return "";
+        }
     }
 }
