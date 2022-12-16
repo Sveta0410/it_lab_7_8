@@ -10,7 +10,7 @@ public class Crawler {
 
         // если при вводе параметров указаны некорректные аргументы, выводим сообщение об ошибке
         if (args.length != 2) {
-            // число аргументов больше/меньше двух ИЛИ веверный ввод url
+            // число аргументов больше/меньше двух
             System.out.println("usage: java Crawler <URL><depth>");
             System.exit(1); // выход с указанием на неудачное завершение
         } else {
@@ -33,7 +33,6 @@ public class Crawler {
 
         // добавляем введённый пользователем сайт в список необработанных ссылок
         uncheckedURL.add(currentURLDepthPair);
-        // добавляем введённый пользователем сайт в список обработанных ссылок
 
         // список для проверенных url
         ArrayList<String> seenURL = new ArrayList<>();
@@ -48,13 +47,13 @@ public class Crawler {
             // запоминаем её глубину
             int currentDepth = depthPair.getDepth();
 
-            // создаём временный список для хранения всех ссылкох, расположеных на текущей странице
-            LinkedList<String> currentLinksList;
-            // добавляем в ранне созданный список ссылки, расположенные на текущей странице
-            currentLinksList = Crawler.getAllLinks(depthPair);
-
             // если мы ещё не достигли максимальной глубины
             if (currentDepth < depth) {
+                // создаём временный список для хранения всех ссылок, расположенных на текущей странице
+                LinkedList<String> currentLinksList;
+                // добавляем в ранне созданный список ссылки, расположенные на текущей странице
+                currentLinksList = Crawler.getAllLinks(depthPair);
+
                 // перебираем все элементы в полученном списке ссылок
                 for (String myURL : currentLinksList) {
                     // если такой ссылки нет
