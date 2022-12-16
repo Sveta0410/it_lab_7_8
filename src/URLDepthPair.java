@@ -57,6 +57,7 @@ public class URLDepthPair {
     // проверяем, является ли найденная строка ссылкой и возвращаем найденный url
     public static String isLink(String link) {
         int start = link.indexOf(URL_HREF);
+        // если URL_HREF не найдено
         if (start == -1) {
             return "";
         }

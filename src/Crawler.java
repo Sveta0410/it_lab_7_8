@@ -34,7 +34,6 @@ public class Crawler {
         // добавляем введённый пользователем сайт в список необработанных ссылок
         uncheckedURL.add(currentURLDepthPair);
         // добавляем введённый пользователем сайт в список обработанных ссылок
-//        checkedURL.add(currentURLDepthPair);
 
         // список для проверенных url
         ArrayList<String> seenURL = new ArrayList<>();
