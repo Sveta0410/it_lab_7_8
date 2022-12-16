@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 public class URLDepthPair {
     public static final String URL_PREFIX = "http://";
-    public static final String URL_HREF = "<a href=\"" + URL_PREFIX;
+    public static final String URL_HREF = "<a href=\"";
     public static final int URL_HREF_LENGTH = URL_HREF.length();
 
 
@@ -55,7 +55,7 @@ public class URLDepthPair {
     }
 
     // проверяем, является ли найденная строка ссылкой и возвращаем найденный url
-    public static String isLink(String link) {
+    public static String isLink(String link, String host) {
         int start = link.indexOf(URL_HREF);
         // если URL_HREF не найдено
         if (start == -1) {
@@ -63,7 +63,12 @@ public class URLDepthPair {
         }
         start += URL_HREF_LENGTH;
         String result = link.substring(start, link.indexOf("\"", start));
-        return "http://" + result;
-
+        // если ссылка начинаетмя не с http
+        if (result.startsWith("https")) {
+            return "";
+        } else if (!result.startsWith("http") ){
+            return "http://" + host + "/" + result;
+        }
+        return result;
     }
 }

@@ -146,7 +146,7 @@ public class Crawler {
                 break;
             }
             // находим url
-            String newURL = URLDepthPair.isLink(line);
+            String newURL = URLDepthPair.isLink(line, currentDepthPair.getHost());
             // если url успешно найдено, добавляем пару
             // если формат не подходит, продолжаем перебирать строки
             if (!"".equals(newURL)) {
