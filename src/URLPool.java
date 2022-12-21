@@ -35,7 +35,6 @@ public class URLPool {
         if (uncheckedURL.size() == 0){
             // увеличиваем счётчик потоков
             waiting ++;
-            System.out.println("-----" + waiting);
             try {
                 // режим ожидания
                 wait();
@@ -56,14 +55,12 @@ public class URLPool {
         if (!seenURL.contains(pairURL)) {
             seenURL.add(pairURL); // добавляем url в список с просмотренными url
 
-            System.out.println(pair.getDepth());
             // если глубина меньше максимальной
             if (pair.getDepth() < maxDepth) {
                 uncheckedURL.add(pair); // добавляем пару в список НЕобработанных сайтов
                 notify(); // продолжаем работу потока, у которого ранее был вызван метод wait()
             }
                 checkedURL.add(pair); // добавляем пару в список обработанных сайтов
-                System.out.println(checkedURL);
         }
     }
     public synchronized void getSites() {

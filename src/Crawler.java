@@ -15,7 +15,7 @@ public class Crawler {
                 depth = Integer.parseInt(args[1]);
                 numOfTreads = Integer.parseInt(args[2]);
             } catch (NumberFormatException notNumber) {
-                System.out.println("usage: java Crawler <URL><depth>");
+                System.out.println("usage: java Crawler <URL><depth><number of threads>");
                 System.exit(1); // выход с указанием на неудачное завершение
             }
         }
